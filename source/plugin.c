@@ -19,14 +19,11 @@
  * MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
+#include "plugin.h"
 #include "config.h"
-#endif
-
 #include "format.h"
 #include "prefs.h"
 #include "style.h"
-#include "plugin.h"
 
 #ifndef _
 #define _(s) s
@@ -38,7 +35,7 @@ GeanyData *geany_data;
 PLUGIN_VERSION_CHECK(211)
 
 PLUGIN_SET_INFO(_("Code Format"), _("Format source code using clang-format."),
-                _("0.1"), _("Matthew Brush <matt@geany.org>"))
+                _(VERSION), _("Matthew Brush <matt@geany.org>"))
 
 enum
 {
@@ -58,9 +55,8 @@ static bool fmt_is_supported_ft(GeanyDocument *doc)
     return false;
   id = doc->file_type->id;
   return (id == GEANY_FILETYPES_C || id == GEANY_FILETYPES_CPP ||
-          id == GEANY_FILETYPES_OBJECTIVEC ||
-          id == GEANY_FILETYPES_JAVA || id == GEANY_FILETYPES_JS ||
-          id == GEANY_FILETYPES_CS);
+          id == GEANY_FILETYPES_OBJECTIVEC || id == GEANY_FILETYPES_JAVA ||
+          id == GEANY_FILETYPES_JS || id == GEANY_FILETYPES_CS);
 }
 
 static void do_format(GeanyDocument *doc, bool entire_doc, bool autof);

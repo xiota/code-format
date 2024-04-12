@@ -1,0 +1,6 @@
+#pragma once
+
+#define VERSION "@version@"
+
+#define FMT_SYSTEM_CONFIG "@prefix@/@project_datadir@/@plugin_conf@"
+#define FMT_README_FILE "@prefix@/@project_docdir@/@doc_readme@"

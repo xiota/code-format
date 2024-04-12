@@ -19,14 +19,10 @@
  * MA 02110-1301, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include "format.h"
-#include "style.h"
 #include "prefs.h"
 #include "process.h"
+#include "style.h"
 
 static GPtrArray *format_arguments(size_t cursor, size_t offset, size_t length,
                                    bool xml_replacements)
@@ -55,7 +51,7 @@ static GPtrArray *format_arguments(size_t cursor, size_t offset, size_t length,
   return args;
 }
 
-#define INVALID_CURSOR ((size_t) - 1)
+#define INVALID_CURSOR ((size_t)-1)
 
 static size_t extract_cursor(GString *str)
 {
@@ -132,7 +128,7 @@ GString *fmt_clang_format(const char *file_name, const char *code,
   args = format_arguments(*cursor, offset, length, xml_replacements);
   work_dir = g_path_get_dirname(file_name);
 
-  proc = fmt_process_open(work_dir, (const char * const *)args->pdata);
+  proc = fmt_process_open(work_dir, (const char *const *)args->pdata);
 
   g_ptr_array_free(args, TRUE);
   g_free(work_dir);
@@ -193,13 +189,13 @@ GString *fmt_clang_format_default_config(const char *based_on_name)
     g_ptr_array_add(args, g_strdup("clang-format"));
 
   g_ptr_array_add(
-      args, g_strdup_printf(
-                "-style=%s",
-                fmt_style_get_cmd_name(fmt_style_from_name(based_on_name))));
+      args,
+      g_strdup_printf("-style=%s", fmt_style_get_cmd_name(
+                                       fmt_style_from_name(based_on_name))));
   g_ptr_array_add(args, g_strdup("-dump-config"));
   g_ptr_array_add(args, NULL);
 
-  proc = fmt_process_open(NULL, (const char * const *)args->pdata);
+  proc = fmt_process_open(NULL, (const char *const *)args->pdata);
   g_ptr_array_free(args, true);
 
   if (!proc)
