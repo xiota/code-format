@@ -1,0 +1,63 @@
+# Maintainer:
+# Contributor: Christopher Arndt <aur -at- chrisarndt -dot- de>
+
+## useful links
+# http://codebrainz.github.io/code-format
+# https://github.com/codebrainz/code-format
+
+## options
+: ${_branch:=master}
+
+# basic info
+_name="code-format"
+_pkgname="geany-plugin-code-format"
+pkgname="$_pkgname-git"
+pkgver=0.0.1.r3.g1f482cb.wip
+pkgrel=1
+pkgdesc='Geany plugin to format code with clang-format'
+url='https://github.com/xiota/geany-code-format'
+arch=('x86_64')
+license=('GPL-2.0-or-later')
+
+depends=(geany)
+makedepends=(
+  meson
+  ninja
+)
+
+provides=(
+  "$_pkgname"
+  "geany-code-format"
+)
+conflicts=(
+  "$_pkgname"
+  "geany-code-format"
+)
+
+_pkgsrc="geany-${_name}"
+source=("$_pkgsrc"::"git+$url.git#branch=$_branch")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgsrc"
+
+  local _pkgver=$(
+    git describe --long --tags --abbrev=7 \
+      | sed 's/^[^0-9]*//;s/\([^-]*-g\)/r\1/;s/-/./g'
+  )
+
+  [[ "$_branch" != "main" ]] && _pkgver+=".$_branch"
+
+  echo "$_pkgver"
+}
+
+build() {
+  meson rewrite kwargs set project / version "$pkgver"
+
+  arch-meson build "$_pkgsrc"
+  meson compile -C build
+}
+
+package() {
+  meson install -C build --destdir "$pkgdir"
+}
